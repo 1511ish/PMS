@@ -9,7 +9,7 @@ const app = express();
 
 const allowedOrigins = [
     'http://localhost:3000',
-    'https://pms-lemon.vercel.app'
+    'https://pms-1m3imaspm-ishants-projects-efc69dee.vercel.app'
 ];
 
 app.use(
