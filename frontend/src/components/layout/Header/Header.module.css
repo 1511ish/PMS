@@ -1,0 +1,40 @@
+/* src/components/Header/Header.module.css */
+
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+  }
+  
+  .pageTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+  }
+  
+  .userSection {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .greeting {
+    font-size: 14px;
+    color: #4b5563;
+  }
+  
+  .userIcon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .profileSection{
+   display: flex;
+   align-items: center;
+   gap: 5px;
+  }
+  

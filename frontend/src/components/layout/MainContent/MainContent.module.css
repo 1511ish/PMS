@@ -1,0 +1,127 @@
+.container {
+    flex: 1;
+    padding: 24px 12px;
+    background-color: #fff;
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+.mainContent{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
+
+
+
+
+.tasksHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.tasksHeader h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.addTaskBtn {
+  background-color: #4D007D; /* purple */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.addTaskBtn:hover {
+  background-color: #553c9a; /* darker purple */
+}
+
+
+
+
+
+
+
+
+.actionCell {
+  position: relative;
+}
+
+.dots {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dots img {
+  width: 20px;
+  height: 20px;
+}
+
+.dropdown {
+  position: absolute;
+  right: 50px;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  z-index: 10;
+  min-width: 100px;
+  overflow: hidden;
+}
+
+.dropdown div {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.dropdown div:hover {
+  background-color: #f3f4f6;
+}
+
+
+
+
+
+.projectCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.projectDescription {
+  margin-top: 0.5rem;
+  color: #555;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+}
+
+.status.active {
+  background-color: #e6ffed;
+  color: #1a7f37;
+}
+
+.status.completed {
+  background-color: #f0f0f0;
+  color: #333;
+}

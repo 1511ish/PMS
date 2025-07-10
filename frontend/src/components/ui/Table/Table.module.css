@@ -1,0 +1,93 @@
+
+
+.container {
+    width: 100%;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+  
+  .header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #111827;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    /* overflow: hidden; */
+  }
+  
+  .table th, .table td {
+    padding: 16px;
+    text-align: left;
+    /* border-bottom: 1px solid #e5e7eb; */
+    font-size: 14px;
+  }
+  
+  .table th {
+    background: #4D007D;
+    font-weight: 600;
+    color: #fff;
+  }
+  .profile{
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.8rem;
+  }
+  .actionCell {
+    position: relative;
+  }
+  
+  .dots {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .dots img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .dropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    z-index: 10;
+    min-width: 100px;
+    overflow: hidden;
+  }
+  
+  .dropdown div {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #374151;
+  }
+  
+  .dropdown div:hover {
+    background-color: #f3f4f6;
+  }
+  
+
+
+  .profile{
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.8rem;
+  }
