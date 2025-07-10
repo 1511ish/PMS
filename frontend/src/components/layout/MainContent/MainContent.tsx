@@ -4,7 +4,6 @@ import styles from './MainContent.module.css';
 import { useAuth } from '../../../context/AuthContext.tsx';
 import Card from '../../ui/Card/Card.tsx';
 import Button from '../../ui/Button/Button.tsx';
-import ModalPortal from '../../ui/ModalPortal/ModalPortal.js';
 import AddTaskModal from '../../modals/AddTaskModal/AddTaskModal.tsx';
 import EditTaskModal from '../../modals/EditTaskModal/EditTaskModal.tsx';
 import TaskTable from './TaskTable.tsx';
@@ -32,7 +31,7 @@ export default function MainContent({
 
   const fetchTasks = async (projectId: string) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/tasks/${projectId}`, {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/${projectId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(res.data);
@@ -44,7 +43,7 @@ export default function MainContent({
   const addTask = async (task: Task) => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/tasks/`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/`,
         { ...task, project: activeTab },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -58,7 +57,7 @@ export default function MainContent({
 
   const handleDelete = async (taskId: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(prev => prev.filter(task => task._id !== taskId));

@@ -16,7 +16,7 @@ const Dashboard = ({ onLogout }) => {
   }, []);
 
   const fetchProjects = async () => {
-    const res = await axios.get('http://localhost:5000/api/projects', { headers: { Authorization: `Bearer ${token}` } });
+    const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects`, { headers: { Authorization: `Bearer ${token}` } });
     setProjects(res.data);
     if (!activeTab && res.data.length > 0) {
       setActiveTab(res.data[0]._id);
@@ -30,7 +30,7 @@ const Dashboard = ({ onLogout }) => {
   }) => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/projects`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects`,
         projectData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -51,7 +51,7 @@ const Dashboard = ({ onLogout }) => {
       console.log("edited prodduct: ", updatedProject);
       const { _id, ...updatedData } = updatedProject;
       const res = await axios.put(
-        `http://localhost:5000/api/projects/${_id}`,
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects/${_id}`,
         updatedData,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -66,7 +66,7 @@ const Dashboard = ({ onLogout }) => {
   };
   
   const handleDeleteProject = async (projectId: string) => {
-    await axios.delete(`http://localhost:5000/api/projects/${projectId}`, {
+    await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setProjects(prev => prev.filter(p => p._id !== projectId));
