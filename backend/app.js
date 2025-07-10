@@ -7,14 +7,9 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = [
-    'http://localhost:3000',
-    'https://pms-1m3imaspm-ishants-projects-efc69dee.vercel.app'
-];
-
 app.use(
     cors({
-        origin: allowedOrigins,
+        origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
     })
