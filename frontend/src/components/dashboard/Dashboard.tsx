@@ -6,20 +6,30 @@ import { Project } from '../../types/Project.ts';
 import styles from './Dashboard.module.css';
 import axios from 'axios';
 
-const Dashboard = ({ onLogout }) => {
+const Dashboard = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeTab, setActiveTab] = useState<string | null>(null);
-  const { token } = useAuth();
+  const { token, setToken } = useAuth();
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
   const fetchProjects = async () => {
-    const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects`, { headers: { Authorization: `Bearer ${token}` } });
-    setProjects(res.data);
-    if (!activeTab && res.data.length > 0) {
-      setActiveTab(res.data[0]._id);
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setProjects(res.data);
+      if (!activeTab && res.data.length > 0) {
+        setActiveTab(res.data[0]._id);
+      }
+    } catch (err) {
+      console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null);
+      }
     }
   };
 
@@ -37,18 +47,17 @@ const Dashboard = ({ onLogout }) => {
         }
       );
       setProjects((prev) => [...prev, res.data]);
-      setActiveTab(res.data._id); // optionally set the newly added project active
+      setActiveTab(res.data._id);
     } catch (err) {
       console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null);
+      }
     }
   };
 
-  const editProject = async (
-    // updatedProject: {_id: string; title: string; description: string; status: string }
-    updatedProject: Project
-  ) => {
+  const editProject = async (updatedProject: Project) => {
     try {
-      console.log("edited prodduct: ", updatedProject);
       const { _id, ...updatedData } = updatedProject;
       const res = await axios.put(
         `${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects/${_id}`,
@@ -62,16 +71,29 @@ const Dashboard = ({ onLogout }) => {
       );
     } catch (err) {
       console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null);
+      }
     }
   };
-  
+
   const handleDeleteProject = async (projectId: string) => {
-    await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects/${projectId}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    setProjects(prev => prev.filter(p => p._id !== projectId));
-    if (activeTab === projectId) {
-      setActiveTab(null); // or select another project
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/projects/${projectId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setProjects((prev) => prev.filter((p) => p._id !== projectId));
+      if (activeTab === projectId) {
+        setActiveTab(null);
+      }
+    } catch (err) {
+      console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null);
+      }
     }
   };
 
@@ -87,22 +109,10 @@ const Dashboard = ({ onLogout }) => {
       />
       <MainContent
         activeTab={activeTab}
-        project={projects.find(p => p._id === activeTab)}
+        project={projects.find((p) => p._id === activeTab)}
       />
     </div>
   );
-
-
 };
 
 export default Dashboard;
-
-
-
-
-
-
-
-
-
-

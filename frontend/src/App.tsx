@@ -5,14 +5,14 @@ import { useAuth } from './context/AuthContext.tsx';
 
 
 function App() {
-  const { token, setToken } = useAuth();
+  const { token } = useAuth();
 
   return (
     <div>
       {!token ? (
         <RegistrationPage />
       ) : (
-        <Dashboard onLogout={() => setToken(null)} />
+        <Dashboard />
       )}
     </div>
   );

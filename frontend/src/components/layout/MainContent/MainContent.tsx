@@ -10,7 +10,6 @@ import TaskTable from './TaskTable.tsx';
 import { Project } from '../../../types/Project.ts';
 import { Task } from '../../../types/Task.ts';
 
-
 export default function MainContent({
   project,
   activeTab,
@@ -21,7 +20,8 @@ export default function MainContent({
   const [tasks, setTasks] = useState<Task[]>([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editTask, setEditTask] = useState<Task | false>(false);
-  const { token } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const { token, setToken } = useAuth();
 
   useEffect(() => {
     if (activeTab) {
@@ -31,12 +31,20 @@ export default function MainContent({
 
   const fetchTasks = async (projectId: string) => {
     try {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/${projectId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/${projectId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setTasks(res.data);
-    } catch (err) {
+      setError(null); 
+    } catch (err: any) {
       console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null); 
+      }
+      setError('Failed to load tasks. Please try again.');
     }
   };
 
@@ -49,26 +57,39 @@ export default function MainContent({
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setTasks(prev => [...prev, res.data]);
-    } catch (err) {
+      setTasks((prev) => [...prev, res.data]);
+      setError(null);
+    } catch (err: any) {
       console.error(err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null);
+      }
+      setError('Failed to add task.');
     }
   };
 
   const handleDelete = async (taskId: string) => {
     try {
-      await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/${taskId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setTasks(prev => prev.filter(task => task._id !== taskId));
+      await axios.delete(
+        `${process.env.REACT_APP_BACKEND_BASE_URL}/api/tasks/${taskId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setTasks((prev) => prev.filter((task) => task._id !== taskId));
+      setError(null);
     } catch (err: any) {
-      console.error('Error deleting task:', err.message);
+      console.error('Error deleting task:', err);
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setToken(null);
+      }
+      setError('Failed to delete task.');
     }
   };
 
   const handleSave = (updatedTask: Task) => {
-    setTasks(prev =>
-      prev.map(task => (task._id === updatedTask._id ? updatedTask : task))
+    setTasks((prev) =>
+      prev.map((task) => (task._id === updatedTask._id ? updatedTask : task))
     );
     setEditTask(false);
   };
@@ -79,6 +100,8 @@ export default function MainContent({
   return (
     <div className={styles.container}>
       <div className={styles.mainContent}>
+        {error && <div className={styles.error}>{error}</div>}
+
         <Card>
           <div className={styles.projectCardHeader}>
             <h2>{project.title}</h2>
@@ -111,13 +134,11 @@ export default function MainContent({
         )}
 
         {editTask && (
-
           <EditTaskModal
             task={editTask}
             onClose={() => setEditTask(false)}
             onSave={handleSave}
           />
-
         )}
       </div>
     </div>

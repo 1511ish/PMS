@@ -1,4 +1,5 @@
-import React,{ createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import axios from 'axios';
 
 type AuthContextType = {
   token: string | null;
@@ -18,6 +19,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     setToken(token);
   };
+
+  const validateToken = async () => {
+    if (!token) return;
+    try {
+      await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/auth/validate`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+    } catch {
+      updateToken(null);
+    }
+  };
+
+  useEffect(() => {
+    validateToken();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ token, setToken: updateToken }}>
