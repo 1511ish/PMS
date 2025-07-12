@@ -38,11 +38,11 @@ export default function MainContent({
         }
       );
       setTasks(res.data);
-      setError(null); 
+      setError(null);
     } catch (err: any) {
       console.error(err);
       if (axios.isAxiosError(err) && err.response?.status === 401) {
-        setToken(null); 
+        setToken(null);
       }
       setError('Failed to load tasks. Please try again.');
     }
@@ -112,16 +112,18 @@ export default function MainContent({
           <p className={styles.projectDescription}>{project.description}</p>
         </Card>
 
-        <div className={styles.tasksHeader}>
-          <h3>Tasks</h3>
-          <Button onClick={() => setShowAddModal(true)}>+ Add Task</Button>
-        </div>
+        <Card>
+          <div className={styles.tasksHeader}>
+            <h3>Tasks</h3>
+            <Button onClick={() => setShowAddModal(true)}>+ Add Task</Button>
+          </div>
 
-        <TaskTable
-          tasks={tasks}
-          onEdit={setEditTask}
-          onDelete={handleDelete}
-        />
+          <TaskTable
+            tasks={tasks}
+            onEdit={setEditTask}
+            onDelete={handleDelete}
+          />
+        </Card>
 
         {showAddModal && (
           <AddTaskModal

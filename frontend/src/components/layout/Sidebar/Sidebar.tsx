@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import styles from './Sidebar.module.css';
 import Button from '../../ui/Button/Button.tsx';
 import AddOrEditProjectModal from '../../modals/AddOrEditProjectModal/AddOrEditProjectModal.tsx'
+import LogoutModal from '../../modals/LogoutModal/Logout.js';
 import { Project } from '../../../types/Project.ts';
+import { useAuth } from '../../../context/AuthContext.tsx';
 
 
 export default function Sidebar({
@@ -20,64 +22,87 @@ export default function Sidebar({
     onAddProject: (data: Project) => void;
     onEditProject: (data: Project) => void;
 }) {
-    const [showModal, setShowModal] = useState(false);
+    const { setToken } = useAuth();
+    const [showProjectModal, setShowProjectModal] = useState(false);
+    const [showLogoutModal, setshowLogoutModal] = useState(false);
     const [editProject, setEditProject] = useState<Project | false>(false);
 
     return (
         <div className={styles.sidebar}>
             <div className={styles.upperSection}>
-                <Button onClick={() => setShowModal(true)}>+ Add Project</Button>
+                <Button onClick={() => setShowProjectModal(true)}>+ Add Project</Button>
             </div>
 
             <div className={styles.lowerSection}>
-                <ul>
-                    {projects.map((project) => (
-                        <li
-                            key={project._id}
-                            className={`${styles.menuItem} ${activeTab === project._id ? styles.active : ''
-                                }`}
-                            onClick={() => {
-                                if (project._id) {
-                                    setActiveTab(project._id);
-                                }
-                            }}
-                        >
-                            <span>{project.title}</span>
+                <section>
+                    <div className={styles.sectionTitle}>Projects</div>
+                    <ul>
+                        {projects.map((project) => (
+                            <li
+                                key={project._id}
+                                className={`${styles.menuItem} ${activeTab === project._id ? styles.active : ''
+                                    }`}
+                                onClick={() => {
+                                    if (project._id) {
+                                        setActiveTab(project._id);
+                                    }
+                                }}
+                            >
+                                <span>{project.title}</span>
 
-                            <div className={styles.projectActions}>
-                                <button
-                                    className={styles.editBtn}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setEditProject(project);
-                                    }}
-                                >
-                                    ✏️
-                                </button>
-                                <button
-                                    className={styles.deleteBtn}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        if (project._id) {
-                                            onDeleteProject(project._id);
+                                <div className={styles.projectActions}>
+                                    <button
+                                        className={styles.editBtn}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setEditProject(project);
+                                        }}
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button
+                                        className={styles.deleteBtn}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (project._id) {
+                                                onDeleteProject(project._id);
+                                            }
                                         }
-                                    }
-                                    }
-                                >
-                                    🗑️
-                                </button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                                        }
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+                <section>
+                    <div className={styles.sectionTitle}>Others</div>
+                    <div className={styles.menuItem} onClick={() => { setshowLogoutModal(true) }}>
+                        <div
+                            style={
+                                {
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }
+                            }>
+                            <img src="/icons/logout2x.png" alt="Logout" className={styles.icon} />
+                            Logout
+                        </div>
+                        {showLogoutModal && (
+                                <LogoutModal onCancel={() => setshowLogoutModal(false)} onLogout={() => { setToken(null) }} />
+                        )}
+                    </div>
+                </section>
             </div>
 
-            {showModal && (
+            {showProjectModal && (
                 <AddOrEditProjectModal
-                    onClose={() => setShowModal(false)}
+                    onClose={() => setShowProjectModal(false)}
                     onSave={(data) => {
                         onAddProject(data);
-                        setShowModal(false);
+                        setShowProjectModal(false);
                     }}
                 />
             )}
