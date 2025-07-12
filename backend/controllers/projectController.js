@@ -2,7 +2,7 @@ const Project = require('../models/Project');
 
 exports.getProjects = async (req, res) => {
     try {
-        const projects = await Project.find(); // removed user filter
+        const projects = await Project.find(); 
         res.json(projects);
     } catch (err) {
         console.error(err);
@@ -12,7 +12,7 @@ exports.getProjects = async (req, res) => {
 
 exports.getProjectById = async (req, res) => {
     try {
-        const project = await Project.findOne({ _id: req.params.id }); // fixed typo
+        const project = await Project.findOne({ _id: req.params.id }); 
         if (!project) {
             return res.status(404).json({ message: 'Project not found' });
         }
@@ -25,7 +25,7 @@ exports.getProjectById = async (req, res) => {
 
 exports.createProject = async (req, res) => {
     try {
-        const project = new Project({ ...req.body });
+        const project = new Project({ ...req.body, user: req.user.id });
         await project.save();
         res.status(201).json(project);
     } catch (err) {
