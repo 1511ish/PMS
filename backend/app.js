@@ -2,15 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
 dotenv.config();
+
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 
 const app = express();
 
-// app.use(cors());
-
 app.use(cors({
-    origin: ['https://your-frontend.vercel.app','http://localhost:3000'], 
+    origin: allowedOrigins,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
